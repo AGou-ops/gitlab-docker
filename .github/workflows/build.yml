@@ -1,6 +1,9 @@
 name: build
 on: [push]
 
+env:
+  OWNER: agou-ops
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +34,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: $OWNER
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup binfmt-support
@@ -44,7 +47,7 @@ jobs:
         id: generate-tags
         run: |
           dockerio_tags=$(echo ${{ matrix.PUSH_TAGS }} | tr ',' '\n' | xargs -I {} echo "docker.io/${{ secrets.DOCKERHUB_USERNAME }}/gitlab:{}" | tr '\n' ',')
-          ghcr_tags=$(echo ${{ matrix.PUSH_TAGS }} | tr ',' '\n' | xargs -I {} echo "ghcr.io/${{ github.repository_owner }}/gitlab-arm:{}" | tr '\n' ',')
+          ghcr_tags=$(echo ${{ matrix.PUSH_TAGS }} | tr ',' '\n' | xargs -I {} echo "ghcr.io/$OWNER/gitlab-arm:{}" | tr '\n' ',')
           echo "push_tags=${dockerio_tags},${ghcr_tags}" >> $GITHUB_ENV
 
       - name: Build and push
