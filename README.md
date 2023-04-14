@@ -105,3 +105,5 @@ Preqrequisites: ARM64 linux machine, docker installed.
       --build-arg RELEASE_PACKAGE=gitlab-ee \
       --build-arg RELEASE_VERSION=15.9.0-ee.0
    ```
+
+
